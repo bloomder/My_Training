@@ -11,7 +11,7 @@ namespace TrafficLight7
     {
         static void Main(string[] args)
         {
-            IApp _app = new App(new PeopleRoadTrafficLight(), new ConsoleInput(), new ConsoleOutput());
+            IApp _app = new App(new TrafficLight(), new ConsoleInput(), new ConsoleOutput());
             _app.Run();
         }
     }
@@ -106,6 +106,11 @@ namespace TrafficLight7
     {
         public void ShowCurrentColor(EColor color)
         {
+            if (color != EColor.Yellow)
+            {
+                Console.WriteLine(EColor.Yellow);
+                Thread.Sleep(1000);
+            }
             Console.WriteLine(color);
         }
     }
