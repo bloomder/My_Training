@@ -106,12 +106,8 @@ namespace TrafficLight7
     {
         public void ShowCurrentColor(EColor color)
         {
-            if (color != EColor.Yellow)
-            {
-                Console.WriteLine(EColor.Yellow);
-                Thread.Sleep(1000);
-            }
-            Console.WriteLine(color);
+            Console.ForegroundColor = (ConsoleColor)color;
+            Console.WriteLine("O");
         }
     }
 
