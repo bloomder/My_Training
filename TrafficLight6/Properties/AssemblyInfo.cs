@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные с этой сборкой.
-[assembly: AssemblyTitle("LightSignal1")]
+[assembly: AssemblyTitle("TrafficLight6")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LightSignal1")]
+[assembly: AssemblyProduct("TrafficLight6")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID представляет идентификатор typelib, если этот проект доступен из модели COM
-[assembly: Guid("f46774ff-199f-48db-b878-f9376d8d44dd")]
+[assembly: Guid("8ea29c90-33cc-4bc2-8a03-04fbac7bfb10")]
 
 // Сведения о версии сборки состоят из указанных ниже четырех значений:
 //

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F46774FF-199F-48DB-B878-F9376D8D44DD}</ProjectGuid>
+    <ProjectGuid>{54DA6870-83C0-487F-8285-D144C80B27D6}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>LightSignal1</RootNamespace>
-    <AssemblyName>LightSignal1</AssemblyName>
+    <RootNamespace>LightSignal4</RootNamespace>
+    <AssemblyName>LightSignal4</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

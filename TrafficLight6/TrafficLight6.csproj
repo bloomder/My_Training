@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F46774FF-199F-48DB-B878-F9376D8D44DD}</ProjectGuid>
+    <ProjectGuid>{8EA29C90-33CC-4BC2-8A03-04FBAC7BFB10}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>LightSignal1</RootNamespace>
-    <AssemblyName>LightSignal1</AssemblyName>
+    <RootNamespace>TrafficLight6</RootNamespace>
+    <AssemblyName>TrafficLight6</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
