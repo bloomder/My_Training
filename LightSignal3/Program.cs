@@ -17,6 +17,7 @@ namespace LightSignal3
     interface ITrafficControl
     {
         void SwitchState();
+        EColor GetCurrentColor();
     }
     interface IOutput
     {
@@ -31,7 +32,6 @@ namespace LightSignal3
         private readonly ITrafficControl _trafficControl;
         private readonly IOutput _output;
         private readonly IInput _input;
-        //private readonly 
         public App(ITrafficControl trafficControl, IOutput output, IInput input)
         {
             _trafficControl = trafficControl;
@@ -40,9 +40,16 @@ namespace LightSignal3
         }
         public void Run()
         {
-
+            while(true)
+            {
+                _output.ShowCurrentColor(_trafficControl.GetCurrentColor());
+                if (_input.NeedToExit()) return;
+                _trafficControl.SwitchState();
+            }
         }
     }
+
+
     class Program
     {
         static void Main(string[] args)

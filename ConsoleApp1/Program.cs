@@ -12,7 +12,6 @@ namespace ConsoleApp1
         Red, Green, Yellow, Blue
     }
 
-
     class App : IApp
     {
         private readonly ITrafficLight _trafficLight;
