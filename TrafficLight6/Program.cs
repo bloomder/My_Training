@@ -10,6 +10,8 @@ namespace TrafficLight6
     {
         static void Main(string[] args)
         {
+            IApp _app = new App(new TrafficLight(), new ConsoleInput(), new ConsoleOutput());
+            _app.Run();
         }
     }
     
@@ -51,7 +53,9 @@ namespace TrafficLight6
         {
             while(true)
             {
-                
+                _output.ShowCurrentColor(_trafficLight.GetCurrentColor());
+                if (_input.NeedToExit()) return;
+                _trafficLight.SwitchState();
             }
         }
     }
@@ -80,6 +84,20 @@ namespace TrafficLight6
                     _ecolor = Ecolor.Yellow;
                     break;
             }
+        }
+    }
+    class ConsoleInput : IInput
+    {
+        public bool NeedToExit()
+        {
+            return Console.ReadLine() == "q";
+        }
+    }
+    class ConsoleOutput : IOutput
+    {
+        public void ShowCurrentColor(Ecolor color)
+        {
+            Console.WriteLine(color);
         }
     }
 
