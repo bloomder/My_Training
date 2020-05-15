@@ -28,45 +28,35 @@ namespace TrafficLight8
     }
     interface IOutput
     {
-        void ShowCurrentColor(EColor color);
+        void ShowCurrentColor(ConsoleColor color);
     }
     interface ITrafficLight
     {
         void SwitchState();
-        EColor GetCurrentColor();
-        ConsoleColor GetCurrentColor(EColor color);
+        ConsoleColor GetCurrentColor();
     }
 
     class TrafficLight : ITrafficLight
     {
-        EColor _ecolor = EColor.Yellow;
+        ConsoleColor _ecolor = ConsoleColor.Yellow;
         bool _downColor = true;
-        public EColor GetCurrentColor()
+        public ConsoleColor GetCurrentColor()
         {
             return _ecolor;
         }
-
-        public ConsoleColor GetCurrentColor(EColor color)
-        {
-            ConsoleColor _consoleColor;
-            
-            
-            
-        }
-
         public void SwitchState()
         {
             switch (_ecolor)
             {
-                case EColor.Red:
-                    _ecolor = EColor.Yellow;
+                case ConsoleColor.Red:
+                    _ecolor = ConsoleColor.Yellow;
                     break;
-                case EColor.Yellow:
-                    _ecolor = _downColor ? EColor.Red : EColor.Green;
+                case ConsoleColor.Yellow:
+                    _ecolor = _downColor ? ConsoleColor.Red : ConsoleColor.Green;
                     _downColor = !_downColor;
                     break;
-                case EColor.Green:
-                    _ecolor = EColor.Yellow;
+                case ConsoleColor.Green:
+                    _ecolor = ConsoleColor.Yellow;
                     break;
             }
         }
@@ -80,7 +70,7 @@ namespace TrafficLight8
     }
     class ConsoleOutput : IOutput
     {
-        public void ShowCurrentColor(EColor color)
+        public void ShowCurrentColor(ConsoleColor color)
         {
             Console.ForegroundColor = color;
             Console.WriteLine("O");
@@ -99,12 +89,20 @@ namespace TrafficLight8
         }
         public void Run()
         {
-            while(true)
+            if (MethodPartLogic()) return;
+            while (true)
             {
+                if (MethodPartLogic()) return;
                 _output.ShowCurrentColor(_trafficLight.GetCurrentColor());
-                if (_input.NeedToExit()) return;
                 _trafficLight.SwitchState();
             }
+        }
+        private bool MethodPartLogic()
+        {
+            _output.ShowCurrentColor(_trafficLight.GetCurrentColor());
+            if (_input.NeedToExit()) return true;
+            _trafficLight.SwitchState();
+            return false;
         }
     }
 }
