@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TrafficLight9;
 
 namespace TrafficLight9
 {
@@ -67,9 +62,7 @@ namespace TrafficLight9
     }
     class TrafficLightV1 : TrafficLight
     {
-        public TrafficLightV1(IOutput output) : base(output)
-        {
-        }
+        public TrafficLightV1(IOutput output) : base(output) { }
         public override void SwitchState()
         {
             switch (_color)
