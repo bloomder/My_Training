@@ -36,6 +36,7 @@ namespace TrafficLight7
     {
         void ShowCurrentColor(EColor color);
     }
+    
 
 
     class TrafficLight : ITrafficLight

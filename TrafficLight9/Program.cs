@@ -37,7 +37,7 @@ namespace TrafficLight9
             _output = output;
             _color = ConsoleColor.Yellow;
             _downColor = true;
-            _output.ShowCurrentColor(_color);
+            SwitchState();
         }
 
         public virtual void SwitchState()
@@ -45,17 +45,17 @@ namespace TrafficLight9
             switch(_color)
             {
                 case ConsoleColor.Green:
-                    _color = ConsoleColor.Yellow;
                     _output.ShowCurrentColor(_color);
+                    _color = ConsoleColor.Yellow;                    
                     break;
                 case ConsoleColor.Yellow:
+                    _output.ShowCurrentColor(_color);
                     _color = _downColor ? ConsoleColor.Green : ConsoleColor.Red;
                     _downColor = !_downColor;
-                    _output.ShowCurrentColor(_color);
                     break;
                 case ConsoleColor.Red:
-                    _color = ConsoleColor.Yellow;
                     _output.ShowCurrentColor(_color);
+                    _color = ConsoleColor.Yellow;
                     break;
             }
         }
@@ -68,18 +68,21 @@ namespace TrafficLight9
             switch (_color)
             {
                 case ConsoleColor.Green:
-                    _color = ConsoleColor.Yellow;
+                    _output.ShowCurrentColor(ConsoleColor.Yellow);
                     _output.ShowCurrentColor(_color);
-                    goto case ConsoleColor.Yellow;
+                    _color = ConsoleColor.Red;
+                    break;
                 case ConsoleColor.Yellow:
+                    _output.ShowCurrentColor(_color);
                     _color = _downColor ? ConsoleColor.Green : ConsoleColor.Red;
                     _downColor = !_downColor;
-                    _output.ShowCurrentColor(_color);
                     break;
                 case ConsoleColor.Red:
-                    _color = ConsoleColor.Yellow;
+                    _output.ShowCurrentColor(ConsoleColor.Yellow);
                     _output.ShowCurrentColor(_color);
-                    goto case ConsoleColor.Yellow;
+                    _color = ConsoleColor.Green;
+                    break;
+
             }
         }
     }
