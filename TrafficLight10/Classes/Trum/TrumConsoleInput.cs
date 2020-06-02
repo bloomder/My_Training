@@ -1,12 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TrafficLight10.Interfaces;
 
 namespace TrafficLight10.Classes.Trum
 {
-    class TrumConsoleInput 
+    class TrumConsoleInput : IInput
     {
+        public bool NeedToExit()
+        {
+            string _stroka = Console.ReadLine();
+            if (_stroka == "q") return true;
+            else
+            {
+                Settings.Settings.stroka = _stroka;
+                return false;
+            }
+        }
     }
 }

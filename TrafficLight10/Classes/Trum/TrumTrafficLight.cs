@@ -4,19 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TrafficLight10.Interfaces;
+using TrafficLight10.Interfaces.ITrum;
 
 namespace TrafficLight10.Classes.Trum
 {
     class TrumTrafficLight : ITrafficLight
     {
-        private readonly IInput _input;
-        public TrumTrafficLight(IInput input)
+        private readonly ITrumOutput _trumOutput;
+        private readonly ITextOutput _textOutput;
+        public TrumTrafficLight(ITrumOutput trumOutput, ITextOutput textOutput)
         {
-            _input = input;
+            _trumOutput = trumOutput;
+            _textOutput = textOutput;
+            _trumOutput.ShowInfo(_textOutput.GetFirstText());
+        }
+        private void ProcessingInfo()
+        {
+            try
+            {
+                 _trumOutput.ShowInfo(_textOutput.GetInfoText(Convert.ToInt32(Settings.Settings.stroka)));
+            }
+            catch(Exception ex)
+            {
+                _trumOutput.ShowInfo(_textOutput.GetInfoText(-1));
+            }
+
         }
         public void SwitchState()
         {
-            throw new NotImplementedException();
+            _trumOutput.ClearConsole();
+            ProcessingInfo();
+            _trumOutput.ShowInfo(_textOutput.GetFirstText());
         }
     }
 }

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrafficLight10.Interfaces
+namespace TrafficLight10.Interfaces.ITrum
 {
-    interface ITextOutput
+    interface ITrumOutput
     {
-        string GetInfoText(int number);
-        string GetFirstText();
+        void ShowInfo(string text);
+        void ClearConsole();
     }
 }
