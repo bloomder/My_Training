@@ -4,20 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TrafficLight10.Interfaces;
-using TrafficLight10.Interfaces.ITrum;
 
 namespace TrafficLight10.Classes.Trum
 {
-    class TrumConsoleOutput : ITrumOutput
+    class TrumInput : IInput
     {
-        public void ClearConsole()
+        public TrumInput() { }
+        public TrumInput()
         {
-            Console.Clear();
-        }
 
-        public void ShowInfo(string text)
+        }
+        public bool NeedToExit()
         {
-            Console.WriteLine(text);
+            
         }
     }
 }

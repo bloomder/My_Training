@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace TrafficLight10.Interfaces.ITrum
 {
-    interface ITrumOutput
+    interface ITrumInput
     {
-        void ShowInfo(string text);
-        void ClearInfo();
+        
     }
 }

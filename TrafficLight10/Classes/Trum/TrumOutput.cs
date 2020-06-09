@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrafficLight10.Interfaces.ITrum
+namespace TrafficLight10.Classes.Trum
 {
-    interface ITrumOutput
+    class TrumOutput
     {
-        void ShowInfo(string text);
-        void ClearInfo();
     }
 }

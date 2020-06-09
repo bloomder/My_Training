@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrafficLight10.Interfaces.ITrum
+namespace TrafficLight11.Interfaces
 {
-    interface ITrumOutput
+    interface ITrafficLight
     {
-        void ShowInfo(string text);
-        void ClearInfo();
+        void SwitchState();
     }
 }

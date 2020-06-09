@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrafficLight10.Interfaces.ITrum
+namespace TrafficLight11
 {
-    interface ITrumOutput
+    class Program
     {
-        void ShowInfo(string text);
-        void ClearInfo();
+        static void Main(string[] args)
+        {
+        }
     }
 }
