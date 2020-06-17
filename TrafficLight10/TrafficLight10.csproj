@@ -50,8 +50,6 @@
     <Compile Include="Classes\TrafficLightV1.cs" />
     <Compile Include="Classes\Trum\Console\TrumConsoleInput.cs" />
     <Compile Include="Classes\Trum\Console\TrumConsoleOutput.cs" />
-    <Compile Include="Classes\Trum\TrumInput.cs" />
-    <Compile Include="Classes\Trum\TrumOutput.cs" />
     <Compile Include="Classes\Trum\TrumTextClass.cs" />
     <Compile Include="Classes\Trum\TrumTrafficLight.cs" />
     <Compile Include="Interfaces\IApp.cs" />

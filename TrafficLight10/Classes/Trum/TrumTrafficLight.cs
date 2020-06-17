@@ -23,20 +23,20 @@ namespace TrafficLight10.Classes.Trum
             
             try
             {
-                 //_trumOutput.ShowInfo(_textOutput.GetInfoText(Convert.ToInt32(Settings.Settings.stroka)));
+                 _trumOutput.ShowInfo(_textOutput.GetInfoText(Convert.ToInt32(Settings.Settings.stroka)));
             }
             catch(Exception ex)
             {
-                //_trumOutput.ShowInfo(_textOutput.GetInfoText(-1));
+                _trumOutput.ShowInfo(_textOutput.GetInfoText(-1));
             }
             
 
         }
         public void SwitchState()
         {
-            //_trumOutput.ClearConsole();
+            _trumOutput.ClearInfo();
             ProcessingInfo();
-            //_trumOutput.ShowInfo(_textOutput.GetFirstText());
+            _trumOutput.ShowInfo(_textOutput.GetFirstText());
         }
     }
 }
