@@ -128,6 +128,7 @@ namespace TrafficLight11
         public TrumConsoleInput(ITextClass textClass)
         {
             _textClass = textClass;
+            Console.WriteLine(_tr)
         }
         public bool NeedToExit()
         {
@@ -150,18 +151,27 @@ namespace TrafficLight11
         }
         public void ShowInformation()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(_textClass.GetSignalTrafficLight(SettingsApp.eTrumSignal));
         }
     }
 
-    class TrumTrafficLight
+    class TrumTrafficLight : ITrafficLight
     {
+        private readonly ITrumOutput _trumOutput;
+        public TrumTrafficLight(ITrumOutput trumOutput)
+        {
+            _trumOutput = trumOutput;
+        }
 
+        public void SwitchState()
+        {
+            
+        }
     }
 
     class TrumTextClass : ITextClass
     {
-        public string FirstInformation()
+        public string GetFirstInformation()
         {
             string _message = "";
             _message = "Выберете действие:\r\n";
@@ -205,39 +215,50 @@ namespace TrafficLight11
             }
         }
 
-        public string SignalTrafficLight(ETrumSignal eTrumSignal)
+        public string GetSignalTrafficLight(ETrumSignal eTrumSignal)
         {
+            string _text = "";
             switch (eTrumSignal)
             {
                 case ETrumSignal.Left:
-
+                    _text = (string)("|O| | |\r\n  |O|");
                     break;
                 case ETrumSignal.Right:
+                    _text = (string)("| | |O|\r\n  |O|");
                     break;
                 case ETrumSignal.Up:
+                    _text = (string)("| |O| |\r\n  |O|");
                     break;
                 case ETrumSignal.Stop:
+                    _text = (string)("|O|O|O|\r\n  | |");
                     break;
                 case ETrumSignal.LeftRight:
+                    _text = (string)("|O| |O|\r\n  |O|");
                     break;
                 case ETrumSignal.LeftUp:
+                    _text = (string)("|O|O| |\r\n  |O|");
                     break;
                 case ETrumSignal.UpRight:
+                    _text = (string)("| |O|O|\r\n  |O|");
                     break;
                 case ETrumSignal.LeftUpRight:
+                    _text = (string)("|O|O|O|\r\n  |O|");
                     break;
                 case ETrumSignal.Off:
+                    _text = (string)("| | | |\r\n  | |");
                     break;
                 case ETrumSignal.Error:
+                    _text = (string)("Ввели недопустимую комманду!");
                     break;
             }
+            return _text;
         }
     }
 
     interface ITextClass
     {
-        string SignalTrafficLight(ETrumSignal eTrumSignal);
-        string FirstInformation();
+        string GetSignalTrafficLight(ETrumSignal eTrumSignal);
+        string GetFirstInformation();
         ETrumSignal GetMode(string stroka);
     }
 
