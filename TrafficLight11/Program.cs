@@ -11,19 +11,27 @@ namespace TrafficLight11
     {
         static void Main(string[] args)
         {
+            //IApp _app = new App(new TrumTrafficLight(new TrumConsoleOutput(), new TrumTextClass()), new TrumConsoleInput());
+            //_app.Run();
         }
     }
 
     class App : IApp
     {
         private readonly ITrafficLight _trafficLight;
-        public App(ITrafficLight trafficLight)
+        private readonly IInput _input;
+        public App(ITrafficLight trafficLight, IInput input)
         {
             _trafficLight = trafficLight;
+            _input = input;
         }
         public void Run()
         {
-
+            while (true)
+            {
+                if (_input.NeedToExit()) return;
+                _trafficLight.SwitchState();
+            }
         }
     }
 
