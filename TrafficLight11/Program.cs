@@ -13,7 +13,8 @@ namespace TrafficLight11
         {
             //IApp _app = new App(new TrumTrafficLight(new TrumConsoleOutput(), new TrumTextClass()), new TrumConsoleInput());
             //IApp _app = new App(new TrafficLight(new ConsoleOutput()), new ConsoleInput());
-            IApp _app = new App(new TrafficLightV1(new ConsoleOutput()), new ConsoleInput());
+            //IApp _app = new App(new TrafficLightV1(new ConsoleOutput()), new ConsoleInput());
+            IApp _app = new App(new TrumTrafficLight(new TrumConsoleOutput(new TrumTextClass())), new TrumConsoleInput(new TrumTextClass()));
             _app.Run();
         }
     }
@@ -34,7 +35,7 @@ namespace TrafficLight11
 
     internal static class SettingsApp
     {
-        internal static ETrumSignal eTrumSignal;
+        internal static ETrumSignal eTrumSignal = ETrumSignal.Off;
     }
 
     class App : IApp
@@ -122,16 +123,16 @@ namespace TrafficLight11
         }
     }
 
-    class TrumConsoleInput : ITrumInput
+    class TrumConsoleInput : ITrumInput, IInput
     {
         private readonly ITextClass _textClass;
         public TrumConsoleInput(ITextClass textClass)
         {
             _textClass = textClass;
-            Console.WriteLine(_tr)
         }
         public bool NeedToExit()
         {
+            Console.WriteLine(_textClass.GetFirstInformation());
             string _stroka = Console.ReadLine();
             if (_stroka == "q") return true;
             else
@@ -148,7 +149,14 @@ namespace TrafficLight11
         public TrumConsoleOutput(ITextClass textClass)
         {
             _textClass = textClass;
+            
         }
+
+        public void ClearInformation()
+        {
+            Console.Clear();
+        }
+
         public void ShowInformation()
         {
             Console.WriteLine(_textClass.GetSignalTrafficLight(SettingsApp.eTrumSignal));
@@ -161,11 +169,12 @@ namespace TrafficLight11
         public TrumTrafficLight(ITrumOutput trumOutput)
         {
             _trumOutput = trumOutput;
+            _trumOutput.ShowInformation();
         }
-
         public void SwitchState()
         {
-            
+            _trumOutput.ClearInformation();
+            _trumOutput.ShowInformation();
         }
     }
 
@@ -265,6 +274,7 @@ namespace TrafficLight11
     interface ITrumOutput
     {
         void ShowInformation();
+        void ClearInformation();
     }
 
     interface ITrumInput
