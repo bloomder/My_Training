@@ -14,8 +14,9 @@ namespace TrafficLight11
             //IApp _app = new App(new TrumTrafficLight(new TrumConsoleOutput(), new TrumTextClass()), new TrumConsoleInput());
             //IApp _app = new App(new TrafficLight(new ConsoleOutput()), new ConsoleInput());
             //IApp _app = new App(new TrafficLightV1(new ConsoleOutput()), new ConsoleInput());
-            IApp _app = new App(new TrumTrafficLight(new TrumConsoleOutput(new TrumTextClass())), new TrumConsoleInput(new TrumTextClass()));
-            _app.Run();
+            //IApp _app = new App(new TrumTrafficLight(new TrumConsoleOutput(new TrumTextClass())), new TrumConsoleInput(new TrumTextClass()));
+            //IApp _app = new App1()
+            //_app.Run();
         }
     }
 
@@ -36,6 +37,19 @@ namespace TrafficLight11
     internal static class SettingsApp
     {
         internal static ETrumSignal eTrumSignal = ETrumSignal.Off;
+    }
+
+    class App1 : IApp
+    {
+        private readonly ITrafficLight1 _trafficLight;
+        public App1(ITrafficLight1 trafficLight)
+        {
+            _trafficLight = trafficLight;
+        }
+        public void Run()
+        {
+            
+        }
     }
 
     class App : IApp
@@ -315,5 +329,10 @@ namespace TrafficLight11
     interface ITrafficLight
     {
         void SwitchState();
-    }    
+    } 
+    interface ITrafficLight1
+    {
+        void SwitchState();
+        
+    }
 }
