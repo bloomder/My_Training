@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficLight10", "TrafficLi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficLight11", "TrafficLight11\TrafficLight11.csproj", "{16E164C2-8411-47ED-9D28-539307A95B55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brainfuck1", "Brainfuck1\Brainfuck1.csproj", "{E2A8D3CD-37F0-45C6-8F99-B8ED8CAFFF3B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		My_Training\My_Training.projitems*{c04be26e-dfcb-4401-b45c-be26dd7c78c4}*SharedItemsImports = 13
@@ -98,6 +100,10 @@ Global
 		{16E164C2-8411-47ED-9D28-539307A95B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16E164C2-8411-47ED-9D28-539307A95B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16E164C2-8411-47ED-9D28-539307A95B55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2A8D3CD-37F0-45C6-8F99-B8ED8CAFFF3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2A8D3CD-37F0-45C6-8F99-B8ED8CAFFF3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2A8D3CD-37F0-45C6-8F99-B8ED8CAFFF3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2A8D3CD-37F0-45C6-8F99-B8ED8CAFFF3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
