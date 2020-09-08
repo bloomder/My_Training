@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Brainfuck1
 {
@@ -6,6 +8,9 @@ namespace Brainfuck1
     {
         static void Main(string[] args)
         {
+            IApp _app = new App(new Brainfuck(new ConsoleOutput()));
+            _app.Start();
+            Console.ReadKey();
         }
     }
 
@@ -21,7 +26,7 @@ namespace Brainfuck1
     }
     interface ILanguage
     {
-        string Processing(string text);
+        void Processing(string text);
     }
     interface IOutput
     {
@@ -35,41 +40,69 @@ namespace Brainfuck1
     class App : IApp
     {
         private readonly ILanguage _language;
-        private readonly IOutput _output;
-        private readonly IInput _input;
-        public App(ILanguage language, IOutput output, IInput input)
+        public App(ILanguage language)
         {
             _language = language;
-            _output = output;
-            _input = input;
-        }
-        public App(ILanguage language, IOutput output)
-        {
-            _language = language;
-            _output = output;
         }
         public void Start()
         {
-            if(_input != null)
-            {
-                Settings.text_input = _input.Read();
-            }
             if(_language != null)
             {
-                Settings.text_output = _language.Processing(Settings.text_input);
+                _language.Processing(Settings.text_input);
             }
-            if(_output != null)
-            {
-                _output.Show(Settings.text_output);
-            }
-
         }
     }
     class Brainfuck : ILanguage
     {
-        public string Processing(string text)
+        private readonly IOutput _output;
+        char[] _massChars = new char[30000];
+        int _count, _countWhile, _posStartWhile, _posEndWhile;
+
+        public Brainfuck(IOutput output)
         {
-            throw new System.NotImplementedException();
+            _output = output;
+        }
+        public void Processing(string text)
+        {
+            _count = 0;
+            for (int i = 0; i < text.Length; i++)
+            {
+                switch(text[i])
+                {
+                    case '+':
+                        _massChars[_count]++;
+                        break;
+                    case '[':
+                        _countWhile = _count;
+                        _posStartWhile = i;
+                        if (_massChars[_countWhile] <= 0) i = _posEndWhile;
+                        break;
+                    case '>':
+                        _count++;   
+                        break;
+                    case '<':
+                        _count--;
+                        break;
+                    case '-':
+                        _massChars[_count]--;
+                        break;
+                    case ']':
+                        _posEndWhile = i;
+                        i = _posStartWhile-1;
+                        break;
+                    case '.':
+                        _output.Show(_massChars[_count].ToString());
+                        break;
+                }
+
+            }
+        }
+    }
+    class ConsoleOutput : IOutput
+    {
+        public void Show(string text)
+        {
+            Console.Write(text);
         }
     }
 }
