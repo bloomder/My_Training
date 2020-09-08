@@ -8,16 +8,10 @@ namespace Brainfuck1
     {
         static void Main(string[] args)
         {
-            IApp _app = new App(new Brainfuck(new ConsoleOutput()));
+            IApp _app = new App(new Brainfuck(new ConsoleOutput(), new ConsoleInput()));
             _app.Start();
             Console.ReadKey();
         }
-    }
-
-    public static class Settings
-    {
-        public static string text_input = "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
-        public static string text_output = "";
     }
 
     interface IApp
@@ -26,7 +20,7 @@ namespace Brainfuck1
     }
     interface ILanguage
     {
-        void Processing(string text);
+        void Processing();
     }
     interface IOutput
     {
@@ -46,28 +40,30 @@ namespace Brainfuck1
         }
         public void Start()
         {
-            if(_language != null)
-            {
-                _language.Processing(Settings.text_input);
-            }
+           _language.Processing();
         }
     }
     class Brainfuck : ILanguage
     {
+        private readonly IInput _input;
         private readonly IOutput _output;
         char[] _massChars = new char[30000];
         int _count, _countWhile, _posStartWhile, _posEndWhile;
+        string _defaultText = "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
 
-        public Brainfuck(IOutput output)
+        public Brainfuck(IOutput output, IInput input)
         {
             _output = output;
+            _input = input;
         }
-        public void Processing(string text)
+        public void Processing()
         {
+            string _text = _input.Read();
+            if (_text == "") _text = _defaultText;
             _count = 0;
-            for (int i = 0; i < text.Length; i++)
+            for (int i = 0; i < _text.Length; i++)
             {
-                switch(text[i])
+                switch(_text[i])
                 {
                     case '+':
                         _massChars[_count]++;
@@ -82,6 +78,7 @@ namespace Brainfuck1
                         break;
                     case '<':
                         _count--;
+                        if (_count < 0) _output.Show("Индекс находился вне границ массива");
                         break;
                     case '-':
                         _massChars[_count]--;
@@ -103,6 +100,14 @@ namespace Brainfuck1
         public void Show(string text)
         {
             Console.Write(text);
+        }
+    }
+    class ConsoleInput : IInput
+    {
+        public string Read()
+        {
+            string _text = Console.ReadLine();
+            return _text;
         }
     }
 }
