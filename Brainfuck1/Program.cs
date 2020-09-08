@@ -78,7 +78,11 @@ namespace Brainfuck1
                         break;
                     case '<':
                         _count--;
-                        if (_count < 0) _output.Show("Индекс находился вне границ массива");
+                        if (_count < 0)
+                        {
+                            _output.Show("Индекс находился вне границ массива");
+                            i = _text.Length;
+                        }
                         break;
                     case '-':
                         _massChars[_count]--;
