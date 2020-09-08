@@ -106,8 +106,7 @@ namespace Brainfuck1
     {
         public string Read()
         {
-            string _text = Console.ReadLine();
-            return _text;
+            return Console.ReadLine();
         }
     }
 }
