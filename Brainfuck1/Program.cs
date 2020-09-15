@@ -8,7 +8,7 @@ namespace Brainfuck1
     {
         static void Main(string[] args)
         {
-            IApp _app = new App(new Brainfuck(new ConsoleOutput(), new ConsoleInput()));
+            IApp _app = new App(new Brainfuck(new ConsoleOutput(), new TestBrainfuckInput(), new Errors()));
             _app.Start();
             Console.ReadKey();
         }
@@ -30,6 +30,10 @@ namespace Brainfuck1
     {
         string Read();
     }
+    interface IErrors
+    {
+        bool FindReport(string text);
+    }
 
     class App : IApp
     {
@@ -47,56 +51,108 @@ namespace Brainfuck1
     {
         private readonly IInput _input;
         private readonly IOutput _output;
+        private readonly IErrors _errors;
         char[] _massChars = new char[30000];
-        int _count, _countWhile, _posStartWhile, _posEndWhile;
-        string _defaultText = "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
+        string _text = "";
+        int _count = 0;
 
-        public Brainfuck(IOutput output, IInput input)
+        public Brainfuck(IOutput output, IInput input, IErrors errors)
         {
             _output = output;
             _input = input;
+            _errors = errors;
         }
         public void Processing()
-        {
-            string _text = _input.Read();
-            if (_text == "") _text = _defaultText;
-            _count = 0;
-            for (int i = 0; i < _text.Length; i++)
+        {            
+            _text = _input.Read();
+            if (_errors.FindReport(_text))
             {
-                switch(_text[i])
+                _count = 0;
+                for (int i = 0; i < _text.Length; i++)
                 {
-                    case '+':
-                        _massChars[_count]++;
-                        break;
-                    case '[':
-                        _countWhile = _count;
-                        _posStartWhile = i;
-                        if (_massChars[_countWhile] <= 0) i = _posEndWhile;
-                        break;
-                    case '>':
-                        _count++;   
-                        break;
-                    case '<':
-                        _count--;
-                        if (_count < 0)
-                        {
-                            _output.Show("Индекс находился вне границ массива");
-                            i = _text.Length;
-                        }
-                        break;
-                    case '-':
-                        _massChars[_count]--;
-                        break;
-                    case ']':
-                        _posEndWhile = i;
-                        i = _posStartWhile-1;
-                        break;
-                    case '.':
-                        _output.Show(_massChars[_count].ToString());
-                        break;
+                    switch (_text[i])
+                    {
+                        case '+':
+                            _massChars[_count]++;
+                            break;
+                        case '-':
+                            _massChars[_count]--;
+                            break;
+                        case '>':
+                            _count++;
+                            break;
+                        case '<':
+                            _count--;
+                            break;
+                        case '[':
+                            if(_massChars[_count]==0)
+                            {
+                                i = (FindEndWhile(i)+1);
+                            }
+                            break;
+                        case ']':
+                            if(_massChars[_count]!=0)
+                            {
+                                i = (FindStartWhile(i)-1);
+                            }
+                            break;
+                        case '.':
+                            _output.Show(_massChars[_count].ToString());
+                            break;
+                    }
+                    if ((_count < 0) || (_count >= 30000))
+                    {
+                        _output.Show("Индекс находился вне границ массива\r\n");
+                        return;
+                    }
                 }
-
             }
+            else
+            {
+                _output.Show("Ошибка компиляции");
+            }
+        }
+        int FindStartWhile(int position)
+        {
+            int _stageWhile = 0;
+            for (int i = position; i >= 0; i--)
+            {
+                if(_text[i]==']')
+                {
+                    _stageWhile++;
+                }
+                if(_text[i]=='[')
+                {
+                    _stageWhile--;
+                }
+                if(_stageWhile==0)
+                {
+                    position = i;
+                    break;
+                }
+            }
+            return position;
+        }
+        int FindEndWhile(int position)
+        {
+            int _stageWhile = 0;
+            for (int i = position; i < _text.Length; i++)
+            {
+                if (_text[i] == '[')
+                {
+                    _stageWhile++;
+                }
+                if (_text[i] == ']')
+                {
+                    _stageWhile--;
+                }                
+                if (_stageWhile == 0)
+                {
+                    position = i;
+                    break;
+                }
+            }
+            return position;
         }
     }
     class ConsoleOutput : IOutput
@@ -111,6 +167,31 @@ namespace Brainfuck1
         public string Read()
         {
             return Console.ReadLine();
+        }
+    }
+    class TestBrainfuckInput : IInput
+    {
+        public string Read()
+        {
+            string _defaultText = "";
+            _defaultText = "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
+            //_defaultText = "+[++[++>]]+++<.";
+            return _defaultText;
+        }
+    }
+
+    class Errors : IErrors
+    {
+        public bool FindReport(string text)
+        {
+            int _count = 0;
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i] == '[') _count++;
+                if (text[i] == ']') _count--;
+            }
+            if (_count == 0) return true;
+            else return false;
         }
     }
 }
