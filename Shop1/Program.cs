@@ -20,19 +20,19 @@ namespace Shop1
     {
         void Start();
         void Stop();
-        void AddBuyer(IBuyer );
+        void AddBuyer(IBuyer buyer);
         void RemoveBuyer();
     }
     interface IBuyer
     {
-        float Score();
+        float Total();
         void PutInBasket();
         void DeleteFromBasket();
     }
     interface IProduct
     {
-        bool SetValue(float price);
-        float GetValue();
+        bool SetPrice(float price);
+        float GetPrice();
     }
     interface ICalculator
     {
@@ -84,7 +84,7 @@ namespace Shop1
         private readonly IProduct _product;
         private readonly ICalculator _calculator;
         private List<IProduct> _listProducts = new List<IProduct>();
-        public float Score()
+        public float Total()
         {
             throw new NotImplementedException();
         }
