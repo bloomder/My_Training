@@ -105,6 +105,7 @@ namespace Brainfuck1
                         _output.Show("Индекс находился вне границ массива\r\n");
                         return;
                     }
+                    
                 }
             }
             else
