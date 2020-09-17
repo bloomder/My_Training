@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shop1
 {
@@ -21,56 +18,84 @@ namespace Shop1
         void Start();
         void Stop();
         void AddBuyer(IBuyer buyer);
-        void RemoveBuyer();
+        void RemoveBuyer(IBuyer buyer);
     }
     interface IBuyer
     {
-        float Total();
-        void PutInBasket();
-        void DeleteFromBasket();
+        decimal Total();
+        void PutInBasket(IProduct product);
+        void DeleteFromBasket(IProduct product);
     }
     interface IProduct
     {
-        bool SetPrice(float price);
-        float GetPrice();
+        void SetPrice(decimal price);
+        decimal GetPrice();
     }
     interface ICalculator
     {
-        float Calculation(float cashBuyer, float price);
+        decimal Calculation(List<IProduct> listProducts);
     }
     interface IInput
     {
-        void Read();
+        bool Read();
+        EAction GetAction();
     }
     interface IOutput
     {
         void Show();
+        void ShowQuestion();
+    }
+    enum EAction
+    {
+        PutProduct,
+        DeleteProduct,
+        OpenBasket,
+        CloseBasket,
+        Error
     }
     class Shop : IShop
     {
         private readonly IInput _input;
         private readonly IOutput _output;
-        private readonly IBuyer _buyer;
+        private IBuyer _buyer;
         private List<IBuyer> _listBuyers = new List<IBuyer>();
 
         public Shop(IInput input, IOutput output)
         {
             _input = input;
             _output = output;
+            _output.ShowQuestion();
         }
         public void AddBuyer(IBuyer buyer)
         {
             _listBuyers.Add(buyer);
         }
 
-        public void RemoveBuyer()
+        public void RemoveBuyer(IBuyer buyer)
         {
-            throw new NotImplementedException();
+            _listBuyers.Remove(buyer);
         }
 
         public void Start()
         {
-            throw new NotImplementedException();
+            _listBuyers.Add(new Buyer());
+            _buyer = _listBuyers[1];
+            while(_input.Read())
+            {
+                switch(_input.GetAction())
+                {
+                    case EAction.PutProduct:
+                        break;
+                    case EAction.DeleteProduct:
+                        break;
+                    case EAction.OpenBasket:
+                        break;
+                    case EAction.CloseBasket:
+                        break;
+                    case EAction.Error:
+                        break;
+                }
+            }
         }
 
         public void Stop()
@@ -84,19 +109,51 @@ namespace Shop1
         private readonly IProduct _product;
         private readonly ICalculator _calculator;
         private List<IProduct> _listProducts = new List<IProduct>();
-        public float Total()
+        public decimal Total()
         {
-            throw new NotImplementedException();
+            return _calculator.Calculation(_listProducts);
         }
 
-        public void DeleteFromBasket()
+        public void DeleteFromBasket(IProduct product)
         {
-            throw new NotImplementedException();
+            _listProducts.Add(product);
         }
 
-        public void PutInBasket()
+        public void PutInBasket(IProduct product)
         {
-            throw new NotImplementedException();
+            _listProducts.Remove(product);
+        }
+    }
+    class Calculator : ICalculator
+    {
+        public decimal Calculation(List<IProduct> listProducts)
+        {
+            decimal _total = 0;
+            foreach (var item in listProducts)
+            {
+                _total += item.GetPrice();
+            }
+            return _total;
+        }
+    }
+    class Product : IProduct
+    {
+        private decimal _price = 0;
+        private string _name = "";
+        public Product(string name, decimal price)
+        {
+            if (name == "") throw new Exception();
+            else _name = name;
+            if (price > 0) _price = price;
+            else throw new Exception();
+
+        }
+        public decimal GetPrice() { return _price; }
+
+        public void SetPrice(decimal price)
+        {
+            if (price > 0) _price = price;
+            else throw new Exception();
         }
     }
 }

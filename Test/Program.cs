@@ -10,49 +10,49 @@ namespace Test
     {
         static void Main(string[] args)
         {
-        }
-        interface IApp
-        {
-            void Run();
-        }
-        interface IAnimal
-        {
-            void Say();
-        }
-        interface IInput
-        {
-            bool NeedToExit();
-        }
-        interface IOutput
-        {
-            void ShowInformation();
-        }
-        class ConsoleInput : IInput
-        {
-            public bool NeedToExit()
-            {
-                return Console.ReadLine() == "q";
-            }
+            List<IBuyer> _listA = new List<IBuyer>();
+            List<IBuyer> _listB = new List<IBuyer>();
+            IBuyer _buyer;
+
+            _listA.Add(new Buyer("Петя"));
+            _listB.Add(new Buyer("Влад"));
+            Console.WriteLine("_listA: " + _listA.Last().GetName());
+            Console.WriteLine("_listB: " + _listB.Last().GetName()+"\r\n");
+
+            _buyer = _listA.Last();
+            _buyer.SetName("Дима");
+
+            Console.WriteLine("_listA: " + _listA.Last().GetName());
+            Console.WriteLine("_listB: " + _listB.Last().GetName()+"\r\n");
+            _listA = _listB;
+
+            Console.WriteLine("_listA: " + _listA.Last().GetName());
+            Console.WriteLine("_listB: " + _listB.Last().GetName());
+
+            Console.ReadKey();
         }
 
-        class Animal : IAnimal
+    }
+    interface IBuyer
+    {
+        string GetName();
+        void SetName(string name);
+    }
+    class Buyer : IBuyer
+    {
+        private string _name = "";
+        public Buyer(string name)
         {
-            public virtual void Say()
-            {
-                throw new NotImplementedException();
-            }
+            _name = name;
+        }
+        public string GetName()
+        {
+            return _name;
         }
 
-        class App : IApp
+        public void SetName(string name)
         {
-            private readonly IInput _input;
-            public void Run()
-            {
-                while(true)
-                {
-                    if()
-                }
-            }
+            _name = name;
         }
     }
 }
