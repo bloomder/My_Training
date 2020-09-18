@@ -16,7 +16,6 @@ namespace Shop1
     interface IShop
     {
         void Start();
-        void Stop();
         void AddBuyer(IBuyer buyer);
         void RemoveBuyer(IBuyer buyer);
     }
@@ -39,11 +38,14 @@ namespace Shop1
     {
         bool Read();
         EAction GetAction();
+        IProduct GetProduct();
     }
     interface IOutput
     {
         void Show();
         void ShowQuestion();
+        void ShowBasket();
+        void ShowError();
     }
     enum EAction
     {
@@ -53,6 +55,19 @@ namespace Shop1
         CloseBasket,
         Error
     }
+    class App : IApp
+    {
+        private readonly IShop _shop;
+        public App(IShop shop)
+        {
+            _shop = shop;
+        }
+        public void Start()
+        {
+            _shop.Start();
+        }
+    }
+
     class Shop : IShop
     {
         private readonly IInput _input;
@@ -85,22 +100,23 @@ namespace Shop1
                 switch(_input.GetAction())
                 {
                     case EAction.PutProduct:
+                        _buyer.PutInBasket(_input.GetProduct());
                         break;
                     case EAction.DeleteProduct:
+                        _buyer.DeleteFromBasket(_input.GetProduct());
                         break;
                     case EAction.OpenBasket:
+                        _output.ShowBasket();
                         break;
                     case EAction.CloseBasket:
+                        _output.ShowQuestion();
                         break;
                     case EAction.Error:
+                        _output.ShowError();
+                        _output.ShowQuestion();
                         break;
                 }
             }
-        }
-
-        public void Stop()
-        {
-            throw new NotImplementedException();
         }
     }
 
