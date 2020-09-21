@@ -39,6 +39,7 @@ namespace Shop1
         bool Read();
         EAction GetAction();
         IProduct GetProduct();
+
     }
     interface IOutput
     {
@@ -47,14 +48,22 @@ namespace Shop1
         void ShowBasket();
         void ShowError();
     }
+    interface IPage
+    {
+        int GetCountPage();
+        List<IProduct> GetPage(List<IProduct> list);
+    }
     enum EAction
     {
         PutProduct,
         DeleteProduct,
         OpenBasket,
         CloseBasket,
+        NextPage,
+        PreviusPage,
         Error
     }
+
     class App : IApp
     {
         private readonly IShop _shop;
@@ -65,6 +74,28 @@ namespace Shop1
         public void Start()
         {
             _shop.Start();
+        }
+    }
+
+    class ConsoleInput : IInput
+    {
+        private EAction _eAction;
+        private IProduct _product;
+        private string _text;
+        public EAction GetAction()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IProduct GetProduct()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Read()
+        {
+            _text = Console.ReadLine();
+            
         }
     }
 
