@@ -7,6 +7,9 @@ namespace Shop1
     {
         static void Main(string[] args)
         {
+            IApp app = new App(new Shop(new ConsoleOutput()));
+            app.Start();
+            Console.ReadKey();
         }
     }
     interface IApp
@@ -21,14 +24,16 @@ namespace Shop1
     }
     interface IBuyer
     {
-        decimal Total();
+        decimal GetTotal();
         void PutInBasket(IProduct product);
         void DeleteFromBasket(IProduct product);
+        List<IProduct> GetListBasket();
     }
     interface IProduct
     {
         void SetPrice(decimal price);
         decimal GetPrice();
+        string GetName();
     }
     interface ICalculator
     {
@@ -43,10 +48,8 @@ namespace Shop1
     }
     interface IOutput
     {
-        void Show();
-        void ShowQuestion();
-        void ShowBasket();
-        void ShowError();
+        void ShowTotal(decimal total);
+        void ShowBasket(List<IProduct> products);
     }
     interface IPage
     {
@@ -84,34 +87,67 @@ namespace Shop1
         private string _text;
         public EAction GetAction()
         {
-            throw new NotImplementedException();
+            return _eAction;
         }
 
         public IProduct GetProduct()
         {
-            throw new NotImplementedException();
+            return _product;
         }
 
         public bool Read()
         {
             _text = Console.ReadLine();
-            
+            if (_text == "q") return false;
+            else
+            {
+
+                return true;
+            }
+        }
+    }
+
+    class ConsoleOutput : IOutput
+    {
+        public void ShowBasket(List<IProduct> products)
+        {
+            foreach (IProduct item in products)
+            {
+                Console.WriteLine(item.GetName() + "............" + item.GetPrice().ToString() + "$");
+            }
+        }
+
+        public void ShowTotal(decimal total)
+        {
+            Console.WriteLine("Total:" + "......." + total.ToString() + "$");
         }
     }
 
     class Shop : IShop
     {
-        private readonly IInput _input;
         private readonly IOutput _output;
         private IBuyer _buyer;
         private List<IBuyer> _listBuyers = new List<IBuyer>();
+        private List<IProduct> _listShopProducts = new List<IProduct>();
 
-        public Shop(IInput input, IOutput output)
+        public Shop(IOutput output)
         {
-            _input = input;
             _output = output;
-            _output.ShowQuestion();
+            PutProductsInShop();
         }
+
+
+        private void PutProductsInShop()
+        {
+            _listShopProducts.Add(new Product("Milk", (decimal)3.15));
+            _listShopProducts.Add(new Product("Bread", (decimal)1.5));
+            _listShopProducts.Add(new Product("Chocolate", (decimal)10.2));
+            _listShopProducts.Add(new Product("Ice cream", (decimal)3.7));
+            _listShopProducts.Add(new Product("Juice", (decimal)13));
+            _listShopProducts.Add(new Product("Tea", (decimal)5.12));
+            _listShopProducts.Add(new Product("Coffee", (decimal)9.8));
+        }
+
         public void AddBuyer(IBuyer buyer)
         {
             _listBuyers.Add(buyer);
@@ -124,30 +160,15 @@ namespace Shop1
 
         public void Start()
         {
-            _listBuyers.Add(new Buyer());
-            _buyer = _listBuyers[1];
-            while(_input.Read())
-            {
-                switch(_input.GetAction())
-                {
-                    case EAction.PutProduct:
-                        _buyer.PutInBasket(_input.GetProduct());
-                        break;
-                    case EAction.DeleteProduct:
-                        _buyer.DeleteFromBasket(_input.GetProduct());
-                        break;
-                    case EAction.OpenBasket:
-                        _output.ShowBasket();
-                        break;
-                    case EAction.CloseBasket:
-                        _output.ShowQuestion();
-                        break;
-                    case EAction.Error:
-                        _output.ShowError();
-                        _output.ShowQuestion();
-                        break;
-                }
-            }
+            _listBuyers.Add(new Buyer(new Calculator()));
+            _buyer = _listBuyers[0];
+            _buyer.PutInBasket(_listShopProducts[0]);
+            _buyer.PutInBasket(_listShopProducts[1]);
+            _buyer.PutInBasket(_listShopProducts[3]);
+            _buyer.PutInBasket(_listShopProducts[3]);
+            _buyer.PutInBasket(_listShopProducts[4]);
+            _output.ShowBasket(_buyer.GetListBasket());
+            _output.ShowTotal(_buyer.GetTotal());
         }
     }
 
@@ -155,20 +176,29 @@ namespace Shop1
     {
         private readonly IProduct _product;
         private readonly ICalculator _calculator;
-        private List<IProduct> _listProducts = new List<IProduct>();
-        public decimal Total()
+        private List<IProduct> _listBuyerProducts = new List<IProduct>();
+        public Buyer(ICalculator calculator)
         {
-            return _calculator.Calculation(_listProducts);
+            _calculator = calculator;
+        }
+        public decimal GetTotal()
+        {
+            return _calculator.Calculation(_listBuyerProducts);
         }
 
         public void DeleteFromBasket(IProduct product)
         {
-            _listProducts.Add(product);
+            _listBuyerProducts.Remove(product);
         }
 
         public void PutInBasket(IProduct product)
         {
-            _listProducts.Remove(product);
+            _listBuyerProducts.Add(product);
+        }
+
+        public List<IProduct> GetListBasket()
+        {
+            return _listBuyerProducts;
         }
     }
     class Calculator : ICalculator
@@ -202,5 +232,10 @@ namespace Shop1
             if (price > 0) _price = price;
             else throw new Exception();
         }
+        public string GetName()
+        {
+            return _name;
+        }
+
     }
 }
