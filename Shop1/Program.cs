@@ -113,13 +113,13 @@ namespace Shop1
         {
             foreach (IProduct item in products)
             {
-                Console.WriteLine(item.GetName() + "............" + item.GetPrice().ToString() + "$");
+                Console.WriteLine(item.GetName().PadRight(10,'.') + item.GetPrice().ToString() + "$");
             }
         }
 
         public void ShowTotal(decimal total)
         {
-            Console.WriteLine("Total:" + "......." + total.ToString() + "$");
+            Console.WriteLine("Total:".PadRight(10,'.') + total.ToString() + "$");
         }
     }
 
@@ -160,15 +160,14 @@ namespace Shop1
 
         public void Start()
         {
-            _listBuyers.Add(new Buyer(new Calculator()));
-            _buyer = _listBuyers[0];
-            _buyer.PutInBasket(_listShopProducts[0]);
-            _buyer.PutInBasket(_listShopProducts[1]);
-            _buyer.PutInBasket(_listShopProducts[3]);
-            _buyer.PutInBasket(_listShopProducts[3]);
-            _buyer.PutInBasket(_listShopProducts[4]);
-            _output.ShowBasket(_buyer.GetListBasket());
-            _output.ShowTotal(_buyer.GetTotal());
+            AddBuyer(new Buyer(new Calculator()));
+            _listBuyers[0].PutInBasket(_listShopProducts[0]);
+            _listBuyers[0].PutInBasket(_listShopProducts[1]);
+            _listBuyers[0].PutInBasket(_listShopProducts[3]);
+            _listBuyers[0].PutInBasket(_listShopProducts[3]);
+            _listBuyers[0].PutInBasket(_listShopProducts[4]);
+            _output.ShowBasket(_listBuyers[0].GetListBasket());
+            _output.ShowTotal(_listBuyers[0].GetTotal());
         }
     }
 
