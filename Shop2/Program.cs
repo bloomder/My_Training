@@ -21,6 +21,7 @@ namespace Shop2
         string GetName();
         decimal GetPrice();
         int GetAmount();
+        int GetDiscount();
     }
     interface IBuyer
     {
@@ -94,11 +95,13 @@ namespace Shop2
         private string _name;
         private decimal _price;
         private int _amount;
-        public Product(string name, decimal price, int amount)
+        private int _discount;
+        public Product(string name, decimal price, int amount, int discount)
         {
             _name = name;
             _price = price;
             _amount = amount;
+            _discount = discount;
         }
         public string GetName()
         {
@@ -112,6 +115,11 @@ namespace Shop2
         {
             return _amount;
         }
+
+        public int GetDiscount()
+        {
+            return _discount;
+        }
     }
     class Warehouse : IWarehouse
     {
@@ -123,8 +131,8 @@ namespace Shop2
         public IProduct GetProduct(string name, int amount)
         {
             var product = _listProducts.First((x) => x.GetName() == name && x.GetAmount() >= amount);
-            var returnProduct = new Product(product.GetName(), product.GetPrice(),amount);
-            product = new Product(product.GetName(), product.GetPrice(), (int)(product.GetAmount() - amount));
+            var returnProduct = new Product(product.GetName(), product.GetPrice(), amount, product.GetDiscount());
+            product = new Product(product.GetName(), product.GetPrice(), (int)(product.GetAmount() - amount), product.GetDiscount());
             return returnProduct;
         }
     }
@@ -145,10 +153,12 @@ namespace Shop2
         public decimal GetTotal()
         {
             decimal _total = 0;
+            decimal _discount = 0;
             foreach (var item in _listProducts)
             {
-                _total += (decimal)(item.GetPrice()*item.GetAmount());
-
+                _discount = 100 - item.GetDiscount();
+                _discount = _discount / 100;
+                _total += (decimal)(Math.Round(((item.GetPrice()*_discount) * item.GetAmount()),2));
             }
             return _total;
         }
@@ -164,8 +174,12 @@ namespace Shop2
         }
         public void Run()
         {
-            _warehouse.AddProduct(new Product("Banana", (decimal)1.5, 3));
+            _warehouse.AddProduct(new Product("Banana", (decimal)1.5, 3, 10));
+            _warehouse.AddProduct(new Product("Apple", (decimal)0.7, 10, 0));
+            _warehouse.AddProduct(new Product("Orange", (decimal)1.2, 15, 15));
             _buyer.PutInBasket("Banana", 2);
+            _buyer.PutInBasket("Apple", 5);
+            _buyer.PutInBasket("Orange", 7);
             _buyer.CheckOut();
         }
     }
@@ -173,9 +187,14 @@ namespace Shop2
     {
         public void Show(IBasket basket)
         {
+            decimal discount = 0;
             foreach (var item in basket.GetProducts())
             {
-                Console.WriteLine(item.GetName().PadRight(20, '.') + item.GetAmount().ToString() + " X " + item.GetPrice().ToString() + "$");
+                discount = 100 - item.GetDiscount();
+                discount = discount / 100;
+                discount = (decimal)(item.GetPrice() * discount);
+                discount = Math.Round(discount, 2);
+                Console.WriteLine(item.GetName().PadRight(20, '.') + item.GetAmount().ToString() + " X " + discount.ToString() + "$");
             }
             Console.WriteLine("Total:".PadRight(24,'.') + basket.GetTotal().ToString() + "$");
         }
