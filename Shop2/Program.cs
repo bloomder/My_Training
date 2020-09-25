@@ -142,6 +142,7 @@ namespace Shop2
 
         public void AddProduct(IProduct product)
         {
+            
             _listProducts.Add(product);
         }
 
@@ -161,6 +162,13 @@ namespace Shop2
                 _total += (decimal)(Math.Round(((item.GetPrice()*_discount) * item.GetAmount()),2));
             }
             return _total;
+        }
+        bool SearchProductBasket(IProduct product)
+        {
+            if()
+            var _product = _listProducts.First((x) => x.GetName() == product.GetName());
+            var b = _listProducts.Any((x) => x.GetName() == product.GetName());
+
         }
     }
     class App : IApp
