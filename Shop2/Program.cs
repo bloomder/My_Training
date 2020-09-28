@@ -8,6 +8,21 @@ using System.Threading.Tasks;
 namespace Shop2
 {
     //Сделать магазин. Есть список товаров и цена на них. Нужно считать на какую сумму покупатель набрал товара.
+
+    /*
+     добавь возможность проводить акции! "2(или 3) товара по цене одного" и "вместе дешевле"!
+     в чеке после суммы за товар нужно писать за что скидка и отрицательную сумму.
+     акция должна работать даже если покупатель покупает не 2 банана вместе, а 2 раза по одному. 
+     вместе дешевле - значит если, например, покупаешь банан и яблоко, то на них даётся скидка 10%
+    */
+    interface IPromotion
+    {
+        bool DiscountExists(IProduct product);
+    }
+    interface ICalculator
+    {
+        string GetCheck(IBasket basket);
+    }
     interface IApp
     {
         void Run();
@@ -96,12 +111,11 @@ namespace Shop2
         private decimal _price;
         private int _amount;
         private int _discount;
-        public Product(string name, decimal price, int amount, int discount)
+        public Product(string name, decimal price, int amount)
         {
             _name = name;
             _price = price;
             _amount = amount;
-            _discount = discount;
         }
         public string GetName()
         {
@@ -131,8 +145,8 @@ namespace Shop2
         public IProduct GetProduct(string name, int amount)
         {
             var product = _listProducts.First((x) => x.GetName() == name && x.GetAmount() >= amount);
-            var returnProduct = new Product(product.GetName(), product.GetPrice(), amount, product.GetDiscount());
-            product = new Product(product.GetName(), product.GetPrice(), (int)(product.GetAmount() - amount), product.GetDiscount());
+            var returnProduct = new Product(product.GetName(), product.GetPrice(), amount);
+            product = new Product(product.GetName(), product.GetPrice(), (int)(product.GetAmount() - amount));
             return returnProduct;
         }
     }
@@ -142,7 +156,6 @@ namespace Shop2
 
         public void AddProduct(IProduct product)
         {
-            
             _listProducts.Add(product);
         }
 
@@ -163,12 +176,36 @@ namespace Shop2
             }
             return _total;
         }
-        bool SearchProductBasket(IProduct product)
-        {
-            if()
-            var _product = _listProducts.First((x) => x.GetName() == product.GetName());
-            var b = _listProducts.Any((x) => x.GetName() == product.GetName());
+    }
+    class Basket2 : IBasket
+    {
+        List<IProduct> _listProducts = new List<IProduct>();
 
+        public void AddProduct(IProduct product)
+        {
+            if (ProductExists(product))
+            {
+                var _product = _listProducts.First((x) => x.GetName() == product.GetName());
+                _product = new Product(product.GetName(), _product.GetPrice(), ((int)(_product.GetAmount() + product.GetAmount())));
+            }
+            else
+            {
+                _listProducts.Add(product);
+            }
+        }
+
+        public List<IProduct> GetProducts()
+        {
+            return _listProducts;
+        }
+
+        public decimal GetTotal()
+        {
+            throw new NotImplementedException();
+        }
+        bool ProductExists(IProduct product)
+        {
+            return _listProducts.Any((x) => x.GetName() == product.GetName());
         }
     }
     class App : IApp
@@ -182,9 +219,9 @@ namespace Shop2
         }
         public void Run()
         {
-            _warehouse.AddProduct(new Product("Banana", (decimal)1.5, 3, 10));
-            _warehouse.AddProduct(new Product("Apple", (decimal)0.7, 10, 0));
-            _warehouse.AddProduct(new Product("Orange", (decimal)1.2, 15, 15));
+            _warehouse.AddProduct(new Product("Banana", (decimal)1.5, 3));
+            _warehouse.AddProduct(new Product("Apple", (decimal)0.7, 10));
+            _warehouse.AddProduct(new Product("Orange", (decimal)1.2, 15));
             _buyer.PutInBasket("Banana", 2);
             _buyer.PutInBasket("Apple", 5);
             _buyer.PutInBasket("Orange", 7);
@@ -195,16 +232,7 @@ namespace Shop2
     {
         public void Show(IBasket basket)
         {
-            decimal discount = 0;
-            foreach (var item in basket.GetProducts())
-            {
-                discount = 100 - item.GetDiscount();
-                discount = discount / 100;
-                discount = (decimal)(item.GetPrice() * discount);
-                discount = Math.Round(discount, 2);
-                Console.WriteLine(item.GetName().PadRight(20, '.') + item.GetAmount().ToString() + " X " + discount.ToString() + "$");
-            }
-            Console.WriteLine("Total:".PadRight(24,'.') + basket.GetTotal().ToString() + "$");
+            
         }
     }
 
