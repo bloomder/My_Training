@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop1", "Shop1\Shop1.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop2", "Shop2\Shop2.csproj", "{2F208494-5CE6-4786-B1DF-5F2A98F52FC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop3", "Shop3\Shop3.csproj", "{9CF9F1B6-7518-4C0C-9CD5-4746AA78B6EB}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		My_Training\My_Training.projitems*{c04be26e-dfcb-4401-b45c-be26dd7c78c4}*SharedItemsImports = 13
@@ -116,6 +118,10 @@ Global
 		{2F208494-5CE6-4786-B1DF-5F2A98F52FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F208494-5CE6-4786-B1DF-5F2A98F52FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F208494-5CE6-4786-B1DF-5F2A98F52FC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CF9F1B6-7518-4C0C-9CD5-4746AA78B6EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CF9F1B6-7518-4C0C-9CD5-4746AA78B6EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CF9F1B6-7518-4C0C-9CD5-4746AA78B6EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CF9F1B6-7518-4C0C-9CD5-4746AA78B6EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
