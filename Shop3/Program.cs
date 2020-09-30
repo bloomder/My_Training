@@ -53,7 +53,15 @@ namespace Shop3
     {
         List<IDiscount> GetDiscounts();
         bool DiscountExists(IProduct product);
-        
+        void AddDiscount(IDiscount discount);
+    }
+    interface IPrice
+    {
+        decimal GetPrice(IProduct product);
+    }
+    interface ICalculator
+    {
+        string GetCheck(IBasket basket);
     }
     interface IShop
     {
@@ -76,13 +84,14 @@ namespace Shop3
     }
 
 
+
     //----------------------------------------------------------------------------------------------
 
     class Product : IProduct
     {
         string _name = "";
         decimal _price = 0;
-        int _amount = 0;
+        int _amount = 0;        
         public Product(string name)
         {
             _name = name;
@@ -122,7 +131,7 @@ namespace Shop3
     class Basket : IBasket
     {
         List<IProduct> _listProducts = new List<IProduct>();
-        public void AddProduct(IProduct product)
+        public void AddProduct(IProduct product) 
         {
             if(ProductExists(product))
             {
@@ -137,7 +146,7 @@ namespace Shop3
 
         public List<IProduct> GetProducts()
         {
-            throw new NotImplementedException();
+            return _listProducts;
         }
 
         bool ProductExists(IProduct product)
@@ -147,6 +156,152 @@ namespace Shop3
         IProduct FindProduct(IProduct product)
         {
             return _listProducts.First((x) => x.GetName() == product.GetName());
+        }
+    }
+
+    class Warehouse : IWarehouse
+    {
+        List<IProduct> _listProducts = new List<IProduct>();
+        public void AddProduct(IProduct product)
+        {
+            if (ProductExists(product)) // Проверяем наличие товара по названию
+            {
+                var _product = FindProduct(product); // Возвращаем объект продукт со склада с количеством
+                _product = new Product(product.GetName(), ((int)(product.GetAmount() + _product.GetAmount()))); // переинициализируем 
+            }   /// объект добавляя нужное количество товара на склад
+            else
+            {
+                _listProducts.Add(product);
+            }
+        }
+        public bool ProductExists(IProduct product)
+        {
+            return _listProducts.Any((x) => x.GetName() == product.GetName());
+        }
+        public IProduct FindProduct(IProduct product)
+        {
+            return _listProducts.First((x) => x.GetName() == product.GetName());
+        }
+
+        public void RemoveProduct(IProduct product)
+        {
+            var _product = _listProducts.First((x) => x.GetName() == product.GetName());
+            _product = new Product(product.GetName(), ((int)(_product.GetAmount() - product.GetAmount()))); // Тут ситуация наоборот
+        }    // переинициализируем объект, вычитая нужное количество товара
+    }
+
+    class Discount : IDiscount
+    {
+        string _name = "";
+        int _discount = 0;
+        List<IProduct> _listProducts = new List<IProduct>();
+        public Discount(string name, int discount, List<IProduct> listProducts)
+        {
+            _name = name;
+            _discount = discount;
+            _listProducts = listProducts;
+        }
+        public int GetDiscount()
+        {
+            return _discount;
+        }
+
+        public string GetName()
+        {
+            return _name;
+        }
+
+        public List<IProduct> GetProducts()
+        {
+            return _listProducts;
+        }
+    }
+
+    class Promotions : IPromotions
+    {
+        List<IDiscount> _listDiscounts = new List<IDiscount>();
+
+        public void AddDiscount(IDiscount discount)
+        {
+            _listDiscounts.Add(discount);
+        }
+
+        public bool DiscountExists(IProduct product)
+        {
+            if(_listDiscounts.Count==0)
+            {
+                return false;
+            }
+            else
+            {
+                foreach (var item in _listDiscounts)
+                {
+                    foreach (var j in item.GetProducts())
+                    {
+                        if(product.GetName()==j.GetName())
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+        public List<IDiscount> GetDiscounts()
+        {
+            return _listDiscounts;
+        }
+    }
+
+    class Prices
+    {
+    }
+
+    class Calculator : ICalculator
+    {
+        private readonly IPromotions _promotions;
+        private readonly IPrice _price;        
+        public Calculator(IPromotions promotions, IPrice price)
+        {
+            _promotions = promotions;
+            _price = price;
+        }
+        public string GetCheck(IBasket basket)
+        {
+            List<int> listTotals = new List<int>();
+            string text = "";
+            int countDiscount = 0;
+            int countTotal = 0;
+            foreach (var productsBasket in basket.GetProducts())
+            {
+                countDiscount = 0;
+                if (_promotions.DiscountExists(productsBasket))
+                {
+                    foreach (var discount in _promotions.GetDiscounts())
+                    {
+                        foreach (var productsDiscount in discount.GetProducts())
+                        {
+                            if (productsBasket.GetName() == productsDiscount.GetName())
+                            {
+                                countDiscount++;
+                            }
+                        }
+                    }                    
+                }
+                else
+                {
+                    text += GetStringProduct(productsBasket);
+                }
+            }
+
+            return text;
+        }
+        string GetStringProduct(IProduct product, )
+        {
+            decimal total = (decimal)(product.GetAmount() * _price.GetPrice(product));
+            string text = product.GetName().PadRight(20, '.') + product.GetAmount() + " X " + _price.GetPrice(product) + " = " + total.ToString();
+            return text;
         }
     }
 
